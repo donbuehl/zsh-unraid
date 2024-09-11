@@ -1,13 +1,13 @@
-# unRAID Oh My Zsh Plugin
+# Unraid Oh My Zsh Plugin
 
-This plugin adds convenient aliases and functions for managing your unRAID server directly from the command line.
+This plugin adds convenient aliases and functions for managing your Unraid server directly from the command line.
 
 ## Installation
 
 1. Clone this repository into your Oh My Zsh custom plugins directory:
 
-   ```
-   git clone https://github.com/yourusername/oh-my-zsh-unraid.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/unraid
+   ´´´
+   git clone https://github.com/donbuehl/zsh-unraid.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/unraid
    ```
 
 2. Add `unraid` to your plugin list in your `.zshrc` file:
@@ -25,8 +25,8 @@ This plugin adds convenient aliases and functions for managing your unRAID serve
 ## Features
 
 ### Array Management
-- `array-start`: Start the unRAID array
-- `array-stop`: Stop the unRAID array
+- `array-start`: Start the Unraid array
+- `array-stop`: Stop the Unraid array
 
 ### Parity Check
 - `parity-check`: Start a parity check
@@ -40,8 +40,8 @@ This plugin adds convenient aliases and functions for managing your unRAID serve
 ### Flash Backup
 - `flash-backup`: Create a bootable backup of your unRAID configuration
 
-### unRAID Upgrade
-- `unraid-upgrade`: Upgrade unRAID to the latest version
+### Unraid Upgrade
+- `unraid-upgrade`: Upgrade Unraid to the latest version
 
 ### Turbo Write
 - `turbo-write-on`: Enable Turbo Write mode
@@ -78,12 +78,12 @@ This plugin adds convenient aliases and functions for managing your unRAID serve
 - `cdplugincode <plugin_name>`: Change directly to the plugin's code directory
 
 ### System Information
-- `unraid_info`: Display a summary of unRAID system information
+- `unraid_info`: Display a summary of Unraid system information
 
 ## Notes
 
 - Some features may require additional plugins or configurations on your unRAID system.
-- This plugin is designed to work with unRAID 6.x and later versions.
+- This plugin is designed to work with Unraid 6.x and later versions.
 - Always exercise caution when using commands that modify your array or system configuration.
 
 ## Contributing
