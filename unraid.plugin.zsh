@@ -128,7 +128,7 @@ unraid_info() {
 # Add unRAID-specific completion
 compdef _gnu_generic array-start array-stop parity-check run-mover update-shares flash-backup unraid-upgrade
 
-function update() {
+function unraid_omz_update() {
     echo "Updating unraid plugin..."
     # Perform git pull in the unraid plugin directory
     result=$(cd "~/.oh-my-zsh/custom/plugins/unraid" && git pull)
@@ -136,4 +136,4 @@ function update() {
 }
 
 # Execute update on every start
-update
+unraid_omz_update
