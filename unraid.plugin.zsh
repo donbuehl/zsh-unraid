@@ -78,10 +78,58 @@ alias cdplugincode='cdplugin $1 emhttp'
 # Function to show unRAID system info
 unraid_info() {
     echo "unRAID Version: $(cat /etc/unraid-version)"
-    echo "Array Status: $(/etc/rc.d/rc.array status)"
-    echo "Running Docker Containers: $(docker ps -q | wc -l)"
-    echo "Running VMs: $(virsh list --state-running --name | wc -l)"
+    #echo "Array Status: $(/usr/local/sbin/mdcmd status | grep -E 'mdState|sbState' | sed 's/^/  /')"
+    #echo "Running Docker Containers: $(docker ps -q | wc -l)"
+    echo "Array Status:"
+    /usr/local/sbin/mdcmd status | grep -E 'mdState|sbState' | sed 's/^/  /'
+    echo "Disk Information:"
+    /usr/local/sbin/mdcmd status | awk '
+        BEGIN {FS="="}
+        /^mdNumDisks/ {total=$2}
+        /^mdNumDisabled/ {disabled=$2}
+        /^diskNumber/ {
+            disk_num = $2
+            getline
+            if ($2 != "") {
+                diskName = $2
+                getline
+                diskSize = $2
+                getline
+                diskState = $2
+                getline
+                diskId = $2
+                getline
+                getline
+                rdevStatus = $2
+                if (rdevStatus == "DISK_OK") {
+                    printf "  Disk %s: %s, Size: %s, State: %s, ID: %s\n", disk_num, diskName, diskSize, diskState, diskId
+                    active++
+                }
+            }
+        }
+        END {
+            printf "Total Disks: %d, Active: %d, Disabled: %d\n", total, active, disabled
+        }
+    '
+    echo "Flash Drive:"
+    df -h /boot | awk 'NR==2 {printf "  Device: %s, Size: %s, Used: %s, Available: %s, Use%%: %s\n", $1, $2, $3, $4, $5}'
+    echo "Running Docker Containers:"
+    docker ps --format "{{.Names}}" | sed 's/^/  /'
+    echo "Total Running Docker Containers: $(docker ps -q | wc -l)"
+    echo "Running VMs:"
+    virsh list --state-running --name | sed '/^$/d' | sed 's/^/  /'
+    echo "Total Running VMs: $(virsh list --state-running --name | sed '/^$/d' | wc -l)"
 }
 
 # Add unRAID-specific completion
 compdef _gnu_generic array-start array-stop parity-check run-mover update-shares flash-backup unraid-upgrade
+
+function update() {
+    echo "Updating unraid plugin..."
+    # Perform git pull in the unraid plugin directory
+    result=$(cd "~/.oh-my-zsh/custom/plugins/unraid" && git pull)
+    echo "unraid: $result"
+}
+
+# Execute update on every start
+update
