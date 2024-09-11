@@ -47,7 +47,7 @@ alias cdisos='cd /mnt/user/isos'
 alias cdshare='cd /mnt/user/share'
 alias cddisks='cd /mnt/disks'
 
-# Function to quickly change to plugin directories
+# Functions to quickly change to plugin directories
 cdplugin() {
     if [ -z "$1" ]; then
         echo "Please provide a plugin name."
@@ -71,9 +71,13 @@ cdplugin() {
     fi
 }
 
-# Aliases for quick access to plugin directories
-alias cdpluginconf='cdplugin $1 config'
-alias cdplugincode='cdplugin $1 emhttp'
+cdpluginconf() {
+    cdplugin "$1" config
+}
+
+cdplugincode() {
+    cdplugin "$1" emhttp
+}
 
 # Function to show unRAID system info
 unraid_info() {
