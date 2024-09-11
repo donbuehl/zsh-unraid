@@ -6,7 +6,7 @@ This plugin adds convenient aliases and functions for managing your Unraid serve
 
 1. Clone this repository into your Oh My Zsh custom plugins directory:
 
-   ´´´
+   ```
    git clone https://github.com/donbuehl/zsh-unraid.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/unraid
    ```
 
