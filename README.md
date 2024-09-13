@@ -28,9 +28,6 @@ This plugin adds convenient aliases and functions for managing your Unraid serve
 - `array-start`: Start the Unraid array
 - `array-stop`: Stop the Unraid array
 
-### Flash Backup
-- `flash-backup`: Create a bootable backup of your unRAID configuration
-
 ### User Scripts
 - `list-scripts`: List all user scripts
 - `run-script <script-name>`: Run a specific user script

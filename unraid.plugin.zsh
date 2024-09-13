@@ -33,9 +33,6 @@ array_control() {
 alias array-start='array_control Start'
 alias array-stop='array_control Stop'
 
-# Flash Backup
-alias flash-backup='/usr/local/sbin/make_bootable_backup'
-
 # User Scripts (assuming CA User Scripts is installed)
 user_scripts_dir="/boot/config/plugins/user.scripts/scripts"
 alias list-scripts='ls -l $user_scripts_dir'
