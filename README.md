@@ -28,24 +28,8 @@ This plugin adds convenient aliases and functions for managing your Unraid serve
 - `array-start`: Start the Unraid array
 - `array-stop`: Stop the Unraid array
 
-### Parity Check
-- `parity-check`: Start a parity check
-
-### Mover
-- `run-mover`: Run the mover to transfer files between cache and array
-
-### Share Management
-- `update-shares`: Update CIFS shares
-
 ### Flash Backup
 - `flash-backup`: Create a bootable backup of your unRAID configuration
-
-### Unraid Upgrade
-- `unraid-upgrade`: Upgrade Unraid to the latest version
-
-### Turbo Write
-- `turbo-write-on`: Enable Turbo Write mode
-- `turbo-write-off`: Disable Turbo Write mode
 
 ### User Scripts
 - `list-scripts`: List all user scripts
