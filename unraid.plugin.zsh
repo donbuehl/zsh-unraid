@@ -137,4 +137,21 @@ unraid_info() {
 }
 
 # Add unRAID-specific completion
-compdef _gnu_generic array-start array-stop parity-check run-mover update-shares flash-backup unraid-upgrade
+compdef _gnu_generic array-start array-stop flash-backup cdplugincode cdpluginconf
+
+function unraid_omz_update() {
+    echo "Updating unraid plugin..."
+    # Perform git pull in the unraid plugin directory
+    cd "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/unraid" || return
+    result=$(git pull)
+    echo "unraid: $result"
+    
+    # Check if the update was successful and not "Already up to date."
+    if [[ $result != *"Already up to date."* ]]; then
+        echo "New updates found. Reloading zsh configuration..."
+        source ~/.zshrc
+    fi
+}
+
+# Execute update on every start
+unraid_omz_update
