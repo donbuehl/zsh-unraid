@@ -151,4 +151,4 @@ function unraid_omz_update() {
 }
 
 # Execute update on every start
-unraid_omz_update
+# unraid_omz_update
