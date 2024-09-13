@@ -1,27 +1,40 @@
 # unraid.plugin.zsh
 
-# Array Management
-alias array-start='/etc/rc.d/rc.array start'
-alias array-stop='/etc/rc.d/rc.array stop'
+array_control() {
+    local action=$1
 
-# Parity Check
-alias parity-check='mdcmd check'
+    echo "Attempting to $action the array..."
+    local csrf_token=$(grep -oP 'csrf_token="\K[^"]+' /var/local/emhttp/var.ini)
+    
+    if [ -z "$csrf_token" ]; then
+        echo "Failed to retrieve CSRF token. Cannot $action the array."
+        return 1
+    fi
 
-# Mover
-alias run-mover='/usr/local/sbin/mover'
+    if curl -s --unix-socket /var/run/emhttpd.socket "http://localhost/update.htm?cmd${action}=apply&csrf_token=$csrf_token" >/dev/null; then
+        local target_status=$([ "$action" = "Start" ] && echo "STARTED" || echo "STOPPED")
+        local current_status=$(/usr/local/sbin/mdcmd status | grep mdState | cut -d= -f2)
+        
+        if [[ "$current_status" == "$target_status" ]]; then
+            echo "Array ${action}ed successfully."
+            return 0
+        else
+            echo "Array $action command sent. Current status: $current_status"
+            echo "Please check the unRAID web interface for further status updates."
+            return 0
+        fi
+    else
+        echo "Failed to send $action command to the array. Check system logs for more information."
+        return 1
+    fi
+}
 
-# Share Management
-alias update-shares='/usr/local/sbin/update_cifs_shares'
+# Aliases for easier access
+alias array-start='array_control Start'
+alias array-stop='array_control Stop'
 
 # Flash Backup
 alias flash-backup='/usr/local/sbin/make_bootable_backup'
-
-# unRAID Upgrade
-alias unraid-upgrade='upgrade'
-
-# Turbo Write (assuming it's installed)
-alias turbo-write-on='echo 1 > /proc/sys/vm/unraid_turbo_write'
-alias turbo-write-off='echo 0 > /proc/sys/vm/unraid_turbo_write'
 
 # User Scripts (assuming CA User Scripts is installed)
 user_scripts_dir="/boot/config/plugins/user.scripts/scripts"
@@ -82,8 +95,6 @@ cdplugincode() {
 # Function to show unRAID system info
 unraid_info() {
     echo "unRAID Version: $(cat /etc/unraid-version)"
-    #echo "Array Status: $(/usr/local/sbin/mdcmd status | grep -E 'mdState|sbState' | sed 's/^/  /')"
-    #echo "Running Docker Containers: $(docker ps -q | wc -l)"
     echo "Array Status:"
     /usr/local/sbin/mdcmd status | grep -E 'mdState|sbState' | sed 's/^/  /'
     echo "Disk Information:"
@@ -127,20 +138,3 @@ unraid_info() {
 
 # Add unRAID-specific completion
 compdef _gnu_generic array-start array-stop parity-check run-mover update-shares flash-backup unraid-upgrade
-
-function unraid_omz_update() {
-    echo "Updating unraid plugin..."
-    # Perform git pull in the unraid plugin directory
-    cd "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/unraid" || return
-    result=$(git pull)
-    echo "unraid: $result"
-    
-    # Check if the update was successful and not "Already up to date."
-    if [[ $result != *"Already up to date."* ]]; then
-        echo "New updates found. Reloading zsh configuration..."
-        source ~/.zshrc
-    fi
-}
-
-# Execute update on every start
-unraid_omz_update
